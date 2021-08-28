@@ -1,3 +1,5 @@
+>  ##### Test task for Software Engineer - Home_ex_12_2020_HMBS.pdf
+
 ### Charity-Sale-FrontEnd
 
 ### *Exercise*
@@ -67,7 +69,6 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
->  ##### Test task for Software Engineer - Home_ex_12_2020_HMBS.pdf
 
 
 
