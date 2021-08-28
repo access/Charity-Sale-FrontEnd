@@ -1,33 +1,3 @@
-# charity-sale-frontend
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
->  ##### Test task for Software Engineer - Home_ex_12_2020_HMBS.pdf
-
-
-
 ### Charity-Sale-FrontEnd
 
 ### *Exercise*
@@ -71,3 +41,33 @@ Use Stubs or Mocks or both when solving input and output problems.
 
 #### *Bonus:* 
 Add functionality to read the items, quantity and price all from a configuration file to database.
+
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+>  ##### Test task for Software Engineer - Home_ex_12_2020_HMBS.pdf
+
+
+
