@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand text-info" href="#">Charity Sale</a>
+      <router-link class="navbar-brand text-info" to="/">Charity Sale</router-link >
       <button
         class="navbar-toggler"
         type="button"
