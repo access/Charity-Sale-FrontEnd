@@ -17,10 +17,17 @@
           ]"
           class="mx-auto d-block product-item"
         />
-        <div class="product-overlay" v-show="!isOutOfStock()">
+        <div
+          class="product-overlay text-center"
+          v-show="!isOutOfStock()"
+          title="ADD TO SHOPPING CART"
+        >
           <button class="product-icon btn btn-link">
             <span class="bi bi-plus-circle-dotted"></span>
           </button>
+          <span class="text-light fw-bold text-center"
+            >ADD TO SHOPPING CART</span
+          >
         </div>
       </div>
       <div class="card-body pt-2">
@@ -73,10 +80,7 @@ export default {
     isOutOfStock() {
       return this.product.count <= 0;
     },
-  },
-  mounted() {
-    //console.log("this.product: ", this.product);
-  },
+  }
 };
 </script>
 

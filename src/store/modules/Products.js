@@ -3,188 +3,169 @@ import axios from 'axios';
 const Products = {
   state: () => ({
     products: [],
-    productsPaginatedData: null,
-    product: null,
     isLoading: false,
-    isCreating: false,
-    createdData: null,
-    isUpdating: false,
-    updatedData: null,
-    isDeleting: false,
-    deletedData: null,
-    cart: []
+    cart: [],
+    totalPrice: 0
   }),
 
   getters: {
     productList: state => state.products,
-    productsPaginatedData: state => state.productsPaginatedData,
-    product: state => state.product,
     isLoading: state => state.isLoading,
-    isCreating: state => state.isCreating,
-    isUpdating: state => state.isUpdating,
-    createdData: state => state.createdData,
-    updatedData: state => state.updatedData,
-
-    isDeleting: state => state.isDeleting,
-    deletedData: state => state.deletedData
+    totalPrice: state => state.totalPrice,
+    cartList: state => state.cart,
+    productAvailableCount: state => (productInCart) => {
+      for (const item of state.products) {
+        if (item.id == productInCart.id) {
+          return item.count;
+        }
+      }
+      return 0;
+    }
   },
 
   actions: {
+    async confirmOrder({ commit }, cartList) {
+      let url = `${process.env.VUE_APP_API_URL}ProductItems`;
+      await axios.put(url, cartList)
+        .then(res => {
+          //const products = res.data;
+          //commit('setProducts', products);
+          console.log("res: ", res);
+          commit('clearCart');
+        }).catch(err => {
+          console.log('error', err);
+        });
+
+    },
+
     async fetchAllProducts({ commit }) {
-      commit('setProductIsLoading', true);
       let url = `${process.env.VUE_APP_API_URL}ProductItems`;
       await axios.get(url)
         .then(res => {
-          //console.log('ress:  ', res);
           const products = res.data;
           commit('setProducts', products);
-          commit('setProductIsLoading', false);
         }).catch(err => {
           console.log('error', err);
-          commit('setProductIsLoading', false);
         });
     },
 
-    addToCart({ commit }, product) {
+    async addToCart({ commit, dispatch }, product) {
+      // await dispatch('fetchProductInfo', product);
+      await dispatch('fetchAllProducts');
       commit('addProductToCart', product);
+      commit('calculateTotalPrice');
       //console.log('addProductToCart', product);
     },
 
-    async fetchDetailProduct({ commit }, id) {
-      commit('setProductIsLoading', true);
-      await axios.get(`${process.env.API_URL}products/${id}`)
-        .then(res => {
-          commit('setProductDetail', res.data.data);
-          commit('setProductIsLoading', false);
-        }).catch(err => {
-          console.log('error', err);
-          commit('setProductIsLoading', false);
-        });
+    async removeFromCart({ commit, dispatch }, product) {
+      commit('removeProductFromCart', product);
+      await dispatch('fetchAllProducts');
+      commit('calculateTotalPrice');
     },
 
-    async storeProduct({ commit }, product) {
-      commit('setProductIsCreating', true);
-      await axios.post(`${process.env.API_URL}products`, product)
-        .then(res => {
-          commit('saveNewProducts', res.data.data);
-          commit('setProductIsCreating', false);
-        }).catch(err => {
-          console.log('error', err);
-          commit('setProductIsCreating', false);
-        });
+    async clearCart({ commit, dispatch }) {
+      commit('clearCart');
+      await dispatch('fetchAllProducts');
+      commit('calculateTotalPrice');
     },
 
-    async updateProduct({ commit }, product) {
-      commit('setProductIsUpdating', true);
-      commit('setProductIsUpdating', true);
-      await axios.post(`${process.env.API_URL}products/${product.id}?_method=PUT`, product)
-        .then(res => {
-          commit('saveUpdatedProduct', res.data.data);
-          commit('setProductIsUpdating', false);
+    async fetchProductInfo({ commit }, product) {
+      await axios.get(`${process.env.VUE_APP_API_URL}ProductItems/${product.id}`)
+        .then(async res => {
+          commit('setProductInfo', await res.data);
         }).catch(err => {
           console.log('error', err);
-          commit('setProductIsUpdating', false);
         });
     },
-
-    async deleteProduct({ commit }, id) {
-      commit('setProductIsDeleting', true);
-      await axios.delete(`${process.env.API_URL}products/${id}`)
-        .then(res => {
-          commit('setDeleteProduct', res.data.data.id);
-          commit('setProductIsDeleting', false);
-        }).catch(err => {
-          console.log('error', err);
-          commit('setProductIsDeleting', false);
-        });
-    },
-
-    updateProductInput({ commit }, e) {
-      commit('setProductDetailInput', e);
-    }
   },
 
   mutations: {
     setProducts: (state, products) => {
-      state.products = products
+      // check if Cart already filled
+      // then recalculate products...
+      for (const [idxInCart, productItemInCart] of state.cart.entries()) {
+        for (const [idxFetchedProduct, productFetched] of products.entries()) {
+          if (productItemInCart.id == productFetched.id) {
+            const fetchedProductCount = productFetched.count;
+            const cartProductCount = state.cart[idxInCart].count;
+            products[idxFetchedProduct].count = fetchedProductCount - cartProductCount;
+          }
+        }
+      }
+      state.products = products;
     },
 
-    setProductsPaginated: (state, productsPaginatedData) => {
-      state.productsPaginatedData = productsPaginatedData
-    },
-
-    setProductDetail: (state, product) => {
-      state.product = product
-    },
-
-    setDeleteProduct: (state, id) => {
-      state.productsPaginatedData.data.filter(x => x.id !== id);
-    },
-
-    setProductDetailInput: (state, e) => {
-      let product = state.product;
-      product[e.target.name] = e.target.value;
-      state.product = product
-    },
-
-    saveNewProducts: (state, product) => {
-      state.products.unshift(product)
-      state.createdData = product;
-    },
-
-    saveUpdatedProduct: (state, product) => {
-      state.products.unshift(product)
-      state.updatedData = product;
-    },
-
-    setProductIsLoading(state, isLoading) {
-      state.isLoading = isLoading
-    },
-
-    setProductIsCreating(state, isCreating) {
-      state.isCreating = isCreating
-    },
-
-    setProductIsUpdating(state, isUpdating) {
-      state.isUpdating = isUpdating
-    },
-
-    setProductIsDeleting(state, isDeleting) {
-      state.isDeleting = isDeleting
+    removeProductFromCart(state, product) {
+      for (const [idx, productItemInCart] of state.cart.entries()) {
+        if (productItemInCart.id == product.id) {
+          if (state.cart[idx].count - 1 > 0) {
+            state.cart[idx].count--;
+          } else {
+            state.cart.splice(idx, 1);
+          }
+        }
+      }
     },
 
     addProductToCart(state, product) {
-      // console.log('state.products: ', state.products);
-      // let filtered = state.products.filter(function (item) {
-      //   return item.id != product.id;
-      // });
-      // console.log('filtered: ', filtered);
-
-      // work with count of product in each object...
+      // work with count of item in each object...
       // lets find needed product-object...
-      let idx = -1;
       for (const [index, item] of state.products.entries()) {
-          console.log('finded,index: ', item,index);
-        if (item == product) {
-          idx = index;
+        if (item.id == product.id) {
           // OK! We found it.. 
           // Let's check the count of items and remove one.
-          console.log('finded: ', item);
           if (item.count > 0) {
-            //item.count--;
-            state.products[idx].count--;
+            // decrease clicked product count
+            state.products[index].count--;
+            // check Cart for existing the same product
+            // if exists, then increase count, else add new product to Cart
+            let foundedProductInCart = false;
+            for (const [idx, productItemInCart] of state.cart.entries()) {
+              if (productItemInCart.id == product.id) {
+                foundedProductInCart = true;
+                state.cart[idx].count++;
+                break;
+              }
+            }
+            if (!foundedProductInCart) {
+              const newCartItem = {
+                ...product,
+                count: 1
+              };
+              state.cart.push(newCartItem);
+            }
           }
-
           break;
         }
       }
-
-
-      //state.products = filtered;
-      //state.products.filter(item => item.id !== product.id);
-      //state.cart.push(product);
     },
 
+    calculateTotalPrice(state) {
+      // calculate the Total price...
+      let amount = 0;
+      for (const cartItem of state.cart) {
+        amount += cartItem.price * cartItem.count;
+      }
+      state.totalPrice = amount;
+    },
+
+    clearCart(state) {
+      state.cart = [];
+      state.totalPrice = 0;
+    },
+
+    setProductInfo(state, product) {
+      //console.log("product: ", product);
+      console.log("fetchProductInfo: ", state, product);
+      // for (const [index, item] of state.products.entries()) {
+      //   if (item.id == product.id) {
+
+      //     //state.products[index] = product;
+      //     //console.log("founded: ", state.products[index].count);
+      //     break;
+      //   }
+      // }
+    }
   }
 }
 

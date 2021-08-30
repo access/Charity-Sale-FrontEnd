@@ -6,8 +6,8 @@ import '@/store/axios.js'
 
 
 createApp(App)
-  .use(router)
   .use(store)
+  .use(router)
   .mount('#app')
 
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
