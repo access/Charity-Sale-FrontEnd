@@ -7,6 +7,7 @@
         <ProductItem
           :product="product"
           :addToCart="addToCart"
+          :getCategoryName="getCategoryName"
         />
       </template>
     </div>
@@ -19,23 +20,13 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ProductList",
-  props: {
-    msg: String,
-  },
   components: { ProductItem },
   computed: {
-    ...mapGetters(["productList", "isLoading"]),
+    ...mapGetters(["productList", "isLoading","getCategoryName"]),
   },
   methods: {
     ...mapActions(["fetchAllProducts", "addToCart"]),
-    getResults() {
-      this.fetchAllProducts(this.query);
-    },
-    searchProducts() {
-      this.fetchAllProducts(this.query);
-    },
   },
-
   created() {
     this.fetchAllProducts();
   },

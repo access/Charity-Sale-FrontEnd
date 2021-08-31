@@ -3,6 +3,7 @@ import axios from 'axios';
 const Products = {
   state: () => ({
     products: [],
+    categories: [],
     isLoading: false,
     cart: [],
     totalPrice: 0
@@ -20,12 +21,35 @@ const Products = {
         }
       }
       return 0;
-    }
+    },
+    getCategoryName: state => (categoryId) => {
+      for (const item of state.categories) {
+        if (item.id == categoryId) {
+          return item.name;
+        }
+      }
+      return '';
+    },
+    categoryList: state => state.categories,
   },
 
   actions: {
+
+    async postNewProduct({ commit }, product) {
+      let url = `${process.env.VUE_APP_API_PRODUCT_ITEMS}`;
+
+      await axios.post(url, product)
+        .then(res => {
+          console.log("res: ", res);
+          console.log('commit: ', commit);
+          //const products = res.data;
+          //commit('setProducts', products);
+        }).catch(err => {
+          console.log('error', err);
+        });
+    },
     async confirmOrder({ commit }, cartList) {
-      let url = `${process.env.VUE_APP_API_URL}ProductItems`;
+      let url = `${process.env.VUE_APP_API_PRODUCT_ITEMS}`;
       await axios.put(url, cartList)
         .then(res => {
           //const products = res.data;
@@ -38,12 +62,24 @@ const Products = {
 
     },
 
-    async fetchAllProducts({ commit }) {
-      let url = `${process.env.VUE_APP_API_URL}ProductItems`;
+    async fetchAllProducts({ commit, dispatch }) {
+      dispatch('fetchAllCategories');
+      let url = `${process.env.VUE_APP_API_PRODUCT_ITEMS}`;
       await axios.get(url)
         .then(res => {
           const products = res.data;
           commit('setProducts', products);
+        }).catch(err => {
+          console.log('error', err);
+        });
+    },
+
+    async fetchAllCategories({ commit }) {
+      let url = `${process.env.VUE_APP_API_CATEGORIES}`;
+      await axios.get(url)
+        .then(async res => {
+          const categories = res.data;
+          commit('setCategories', await categories);
         }).catch(err => {
           console.log('error', err);
         });
@@ -70,7 +106,7 @@ const Products = {
     },
 
     async fetchProductInfo({ commit }, product) {
-      await axios.get(`${process.env.VUE_APP_API_URL}ProductItems/${product.id}`)
+      await axios.get(`${process.env.VUE_APP_API_PRODUCT_ITEMS}/${product.id}`)
         .then(async res => {
           commit('setProductInfo', await res.data);
         }).catch(err => {
@@ -80,6 +116,10 @@ const Products = {
   },
 
   mutations: {
+    setCategories: (state, categories) => {
+      state.categories = categories;
+    },
+
     setProducts: (state, products) => {
       // check if Cart already filled
       // then recalculate products...
@@ -92,6 +132,7 @@ const Products = {
           }
         }
       }
+      products.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
       state.products = products;
     },
 

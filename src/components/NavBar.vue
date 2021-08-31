@@ -19,16 +19,25 @@
             <router-link class="nav-link"  to="/">Home</router-link>
           </li>
           <li class="nav-item">
+            <router-link  class="nav-link"  to="/checkout">Checkout</router-link>
+          </li>
+          <li class="nav-item">
             <router-link  class="nav-link"  to="/add">Add product</router-link>
           </li>
           <li class="nav-item">
-            <router-link  class="nav-link"  to="/bonus">Bonus</router-link>
+            <router-link  class="nav-link"  to="/manage-products">Manage products</router-link>
           </li>
           <li class="nav-item">
-            <router-link  class="nav-link"  to="/checkout">Checkout</router-link>
+            <router-link  class="nav-link"  to="/bonus">Bonus</router-link>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 </template>
+
+<style scoped>
+.active{
+  font-weight: bold;
+}
+</style>

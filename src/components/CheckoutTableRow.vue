@@ -2,8 +2,8 @@
   <tr class="text-nowrap">
     <th scope="row">{{ index + 1 }}</th>
     <td>
-      <span class="fw-bold text-dark"
-        >{{ product.name }}
+      <div class="d-flex justify-content-between">
+        <span class="ml-3 fw-bold text-dark">{{ product.name }} </span>
         <span
           :class="[
             productAvailableCount(product) > 0
@@ -13,7 +13,7 @@
         >
           {{ productAvailableCount(product) }}</span
         >
-      </span>
+      </div>
     </td>
     <td>{{ product.price.toFixed(2) }} €</td>
     <td>

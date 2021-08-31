@@ -1,16 +1,9 @@
 <template>
   <div class="col my-3">
-    <div
-      :class="[
-        isOutOfStock()
-          ? 'card border-dark out-of-stock h-100'
-          : 'card border-dark h-100',
-      ]"
-      @click="addToCart(product)"
-    >
-      <div class="mobile-overlay" v-show="!isOutOfStock()">
+    <div class="card border-dark h-100" @click="manageProduct">
+      <div class="mobile-overlay">
         <button class="mobile-icon btn btn-sm btn-link">
-          <span class="bi bi-plus-circle-dotted"></span>
+          <span class="bi bi-gear"></span>
         </button>
       </div>
 
@@ -23,16 +16,12 @@
           ]"
           class="mx-auto d-block product-item"
         />
-        <div
-          class="product-overlay text-center"
-          v-show="!isOutOfStock()"
-          title="ADD TO SHOPPING CART"
-        >
+        <div class="product-overlay text-center" title="MANAGE PRODUCT">
           <button class="product-icon btn btn-link">
-            <span class="bi bi-plus-circle-dotted"></span>
+            <span class="bi bi-gear"></span>
           </button>
           <span class="text-light fw-bold text-center add-to-cart-text"
-            >ADD TO SHOPPING CART</span
+            >MANAGE PRODUCT</span
           >
         </div>
       </div>
@@ -73,8 +62,10 @@
 </template>
 
 <script>
+import * as bootstrap from "bootstrap";
+
 export default {
-  name: "ProductItem",
+  name: "ManageProductItem",
   data() {
     return {
       imagesUrl:
@@ -92,11 +83,29 @@ export default {
     },
     addToCart: Function,
     getCategoryName: Function,
+    setCurrentManagedProduct: Function,
   },
   methods: {
     isOutOfStock() {
       return this.product.count <= 0;
     },
+    manageProduct() {
+      var myModal = new bootstrap.Modal(
+        document.getElementById("ManageProductModal"),
+        {
+          keyboard: false,
+        }
+      );
+      //var modal = bootstrap.Modal.getOrCreateInstance(myModal);
+      this.setCurrentManagedProduct(this.product);
+      console.log("this.product: ", this.product);
+      // myModal.addEventListener("shown.bs.modal", function() {
+      //   //myInput.focus();
+      // });
+
+      myModal.show();
+    },
+    
   },
 };
 </script>
@@ -125,7 +134,7 @@ export default {
   width: 100%;
   opacity: 0;
   transition: 0.3s ease;
-  background-color: rgb(66, 144, 66);
+  background-color: rgb(29, 8, 63);
 }
 
 .product-image:hover .product-overlay {

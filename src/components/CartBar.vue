@@ -1,5 +1,5 @@
 <template>
-  <nav
+  <nav v-show="$route.name != 'ManageProducts'"
     class="navbar navbar-expand-md navbar-light fixed-bottom"
     style="background-color: #e3f2fd;"
   >
@@ -20,7 +20,7 @@
         <i class="bi bi-list-check"></i>
       </button>
       <div class="collapse navbar-collapse" id="CartBarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0" v-show="$route.name != 'Checkout'">
           <li class="nav-item">
             <button
               @click="clearCart"
@@ -30,7 +30,7 @@
               CLEAR SHOPPING CART
             </button>
           </li>
-          <li class="nav-item" v-show="$route.name != 'Checkout'">
+          <li class="nav-item">
             <router-link
               class="btn btn-success mt-2 my-md-0 mx-md-2"
               to="/checkout"

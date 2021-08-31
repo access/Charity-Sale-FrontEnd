@@ -6,22 +6,33 @@
       <div class="m-3 p-3 col">
         <div class="mb-3">
           <select
-            v-model="categoryId"
-            class="form-select"
+            v-model="product.categoryId"
+            :class="[
+              product.categoryId >= 0
+                ? 'form-select is-valid'
+                : 'form-select is-invalid',
+            ]"
             aria-label="Default select example"
           >
-            <option value="0" selected>Select product category</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option value="-1" selected>Select product category</option>
+            <option
+              v-for="category in categoryList"
+              :key="category.id"
+              :value="category.id"
+              >{{ category.name }}</option
+            >
           </select>
         </div>
         <div class="mb-3">
           <label for="productName" class="form-label">Product name</label>
           <input
-            v-model="name"
+            v-model="product.name"
             type="text"
-            class="form-control"
+            :class="[
+              !!product.name
+                ? 'form-control is-valid'
+                : 'form-control is-invalid',
+            ]"
             id="productName"
             aria-describedby="productNameHelp"
           />
@@ -32,9 +43,15 @@
         <label for="productPrice" class="form-label">Product price</label>
         <div class="input-group">
           <input
-            v-model="price"
+            v-model="product.price"
             type="number"
-            class="form-control"
+            :class="[
+              product.price >= 0 &&
+              product.price != null &&
+              product.price !== ''
+                ? 'form-control is-valid'
+                : 'form-control is-invalid',
+            ]"
             id="productPrice"
             aria-describedby="productPriceHelp"
             min="0.00"
@@ -48,12 +65,17 @@
         <div class="mb-3">
           <label for="productCount" class="form-label">Product count</label>
           <input
-            v-model="count"
+            v-model="product.count"
             type="number"
-            class="form-control"
+            :class="[
+              product.count > 0 && product.count != null && product.count !== ''
+                ? 'form-control is-valid'
+                : 'form-control is-invalid',
+            ]"
             id="productCount"
             aria-describedby="productCountHelp"
             step="1"
+            min="0"
           />
           <div id="productCountHelp" class="form-text">
             The quantity of the specified product (cannot be 0 or less) for
@@ -74,32 +96,62 @@
           >
         </div>
 
-        <button
-          @click="addProduct"
-          class="btn btn-sm-lg btn-outline-primary mt-4"
-        >
-          Add product
-        </button>
+        <div class="m-3 p-3 col text-center">
+          <button
+            :class="[
+              isValidProduct()
+                ? 'btn btn-lg btn-success mt-4'
+                : 'btn btn-lg btn-secondary disabled mt-4',
+            ]"
+            data-bs-toggle="modal"
+            data-bs-target="#addNewProduct"
+          >
+            Publish new product
+          </button>
+
+          <Modal
+            :action="addNewProduct"
+            modalTarget="addNewProduct"
+            message="Are you sure you want to publish this new product?"
+            title="Confirm publication"
+            actionButtonName="Confirm publication!"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import Modal from "@/components/Modal.vue";
+
 export default {
   name: "AddProduct",
   props: {},
+  components: { Modal },
   data() {
     return {
-      categoryId: 0,
-      name: "",
-      price: null,
-      count: null,
-      imageFile: null,
+      product: {
+        id: 0,
+        categoryId: -1,
+        name: "",
+        previewImageFileName: "",
+        price: null,
+        count: null,
+        reserved: 0,
+        imageFile: null,
+      },
       image: new Image(),
     };
   },
+  computed: {
+    ...mapGetters(["categoryList"]),
+  },
+
   methods: {
+    ...mapActions(["postNewProduct"]),
+
     onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -109,22 +161,41 @@ export default {
       var reader = new FileReader();
 
       reader.onload = (e) => {
-        this.image = e.target.result;
+        // const arrayBuffer = this.result;
+        // const array = new Uint8Array(arrayBuffer);
+        // const binaryString = String.fromCharCode.apply(null, array);
+        // this.product.imageFile = binaryString;
+        this.product.imageFile = e.target.result;
       };
+      // reader.addEventListener("loadend", (e) => {
+      //   this.product.imageFile = new Uint8Array(e.target.result);
+      // });
       reader.readAsDataURL(file);
+      //reader.readAsArrayBuffer(file);
     },
     removeImage: function() {
       this.image = "";
     },
-    addProduct() {
-      const product = {
-        categoryId: this.categoryId,
-        name: this.name,
-        price: this.price,
-        count: this.count,
-        imageFile: this.image,
-      };
-      console.log("Product: ", product);
+    addNewProduct() {
+      console.log("isValidProduct(): ", this.isValidProduct());
+      console.log("Product: ", this.product);
+
+      if (this.isValidProduct()) {
+        this.postNewProduct(this.product);
+      this.$router.push('/publish-complete');
+      }
+    },
+    isValidProduct() {
+      return (
+        this.product.categoryId >= 0 &&
+        !!this.product.name &&
+        this.product.price >= 0 &&
+        this.product.price != null &&
+        this.product.price !== "" &&
+        this.product.count > 0 &&
+        this.product.count != null &&
+        this.product.count !== ""
+      );
     },
   },
 };
