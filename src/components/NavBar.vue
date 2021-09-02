@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-      <router-link class="navbar-brand text-info" to="/">Charity Sale</router-link >
+      <router-link class="navbar-brand text-info fw-bold" to="/">Charity Sale</router-link >
       <button
         class="navbar-toggler"
         type="button"
@@ -30,11 +30,26 @@
           <li class="nav-item">
             <router-link  class="nav-link"  to="/bonus">Bonus</router-link>
           </li>
+          <li class="nav-item">
+            <button  class="btn btn-link nav-link" @click="openSwagger">Swagger</button>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+
+export default ({
+  methods:{
+    openSwagger(){
+      window.open(process.env.VUE_APP_BACKEND_SERVER_BASE+'/swagger');
+    }
+  }
+})
+</script>
+
 
 <style scoped>
 .active{

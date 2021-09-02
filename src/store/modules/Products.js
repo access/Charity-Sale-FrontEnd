@@ -60,6 +60,9 @@ const Products = {
           if (res.status == 201) {
             notice("Bulk upload", "Upload completed successfully!", 'success');
             commit("OK");
+            router.push("/publish-complete");
+          } else if (res.status == 204) {
+            notice("Bulk upload", "Input data incorrect", 'warn');
           }
           else {
             notice("Bulk upload", `${res.status} An error has occurred!`, 'warn');
@@ -116,7 +119,7 @@ const Products = {
         });
     },
     // PUT: api/ProductItems -> [FromBody] Products productItems
-    async confirmOrder({ commit , dispatch}, cartList) {
+    async confirmOrder({ commit, dispatch }, cartList) {
       const url = `${process.env.VUE_APP_API_PRODUCT_ITEMS}`;
       await axios.put(url, cartList)
         .then(res => {
