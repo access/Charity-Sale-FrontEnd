@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Products>
+    <ProductItem>
+        <CategoryName>Games</CategoryName>
+        <Name>Ball</Name>
+        <Price>35.99</Price>
+        <Count>3</Count>
+    </ProductItem>
+    <ProductItem>
+        <CategoryName>Transport</CategoryName>
+        <Name>Boat</Name>
+        <Price>3895.99</Price>
+        <Count>1</Count>
+    </ProductItem>
+    <ProductItem>
+        <Name>Chair</Name>
+        <Price>3</Price>
+        <Count>2</Count>
+    </ProductItem>
+    <ProductItem>
+        <Name>Yehooo</Name>
+        <Price>899.99</Price>
+        <Count>1</Count>
+    </ProductItem>
+    <ProductItem>
+        <CategoryName>Some new category</CategoryName>
+        <Name>Tralala</Name>
+        <Price>88.77</Price>
+        <Count>44</Count>
+    </ProductItem>
+</Products>

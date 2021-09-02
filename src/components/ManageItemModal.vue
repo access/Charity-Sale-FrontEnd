@@ -24,7 +24,7 @@
               <img
                 :src="[
                   !!product.previewImageFileName
-                    ? imagesUrl + product.previewImageFileName
+                    ? imagesUrl(product)
                     : '/images/product-item.png',
                 ]"
                 class="mx-auto d-block product-item"
@@ -72,7 +72,7 @@
             type="button"
             class="btn btn-primary"
             data-bs-dismiss="modal"
-            @click="action"
+            @click="changeProduct(product)"
           >
             {{ actionButtonName }}
           </button>
@@ -90,7 +90,7 @@ export default {
     increaseCount: Function,
     decreaseCount: Function,
     getCategoryName: Function,
-    action: Function,
+    changeProduct: Function,
     modalTarget: String,
     message: String,
     title: String,
@@ -106,7 +106,7 @@ export default {
   },
   data() {
     return {
-      imagesUrl: process.env.VUE_APP_STORE_IMAGES,
+      imagesUrl(product){return process.env.VUE_APP_STORE_IMAGES + product.previewImageFileName} ,
     };
   },
   methods: {

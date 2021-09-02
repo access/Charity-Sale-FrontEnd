@@ -8,20 +8,21 @@
           :product="product"
           :addToCart="addToCart"
           :getCategoryName="getCategoryName"
-        :setCurrentManagedProduct="setCurrentManagedProduct"
+          :setCurrentManagedProduct="setCurrentManagedProduct"
         />
       </template>
 
       <ManageItemModal
         modalTarget="ManageProductModal"
         message="Are you sure you want to publish this new product?"
-        :product="currentManagedProduct"
         actionButtonName="Confirm changes"
+        :product="currentManagedProduct"
         :getCategoryName="getCategoryName"
         :increaseCount="increaseCount"
         :decreaseCount="decreaseCount"
-         :setCount="setCount"
-     />
+        :setCount="setCount"
+        :changeProduct="changeProduct"
+      />
     </div>
   </div>
 </template>
@@ -32,7 +33,7 @@ import { mapGetters, mapActions } from "vuex";
 import ManageItemModal from "@/components/ManageItemModal.vue";
 
 export default {
-  name: "ProductList",
+  name: "ManageProductList",
   components: { ManageProductItem, ManageItemModal },
   data() {
     return {
@@ -52,29 +53,37 @@ export default {
     ...mapGetters(["productList", "isLoading", "getCategoryName"]),
   },
   methods: {
-    ...mapActions(["fetchAllProducts", "addToCart"]),
+    ...mapActions([
+      "fetchAllProducts",
+      "addToCart",
+      "changeProduct",
+      "setManagmentMode",
+    ]),
     setCurrentManagedProduct(product) {
       const clonedProduct = {
-        ...product
+        ...product,
       };
       this.currentManagedProduct = clonedProduct;
     },
-    increaseCount(){
+    increaseCount() {
       this.currentManagedProduct.count++;
     },
-    decreaseCount(){
-      if(this.currentManagedProduct.count-1>=0)
-      this.currentManagedProduct.count--;
+    decreaseCount() {
+      if (this.currentManagedProduct.count - 1 >= 0)
+        this.currentManagedProduct.count--;
     },
-    setCount(count){
-      console.log('count: ',count)
-      if(count>=0)
-      this.currentManagedProduct.count=count;
-    }
-
+    setCount(count) {
+      if (count >= 0) this.currentManagedProduct.count = count;
+    },
   },
   created() {
     this.fetchAllProducts();
+    this.setManagmentMode(true);
+  },
+  unmount() {
+  },
+  beforeUnmount() {
+    this.setManagmentMode(false);
   },
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <NavBar />
   <CartBar />
+  <notifications position="bottom right"/>
   <router-view />
 </template>
 

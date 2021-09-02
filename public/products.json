@@ -1,0 +1,41 @@
+[
+  {
+    "categoryName": "Some new category",
+    "name": "Ferrari",
+    "price": 4600.35,
+    "count": 1
+  },
+  {
+    "name": "Without category",
+    "price": 1.5,
+    "count": 48
+  },
+  {
+    "categoryName": "Bake",
+    "name": "Coca-Cola",
+    "price": 0.89,
+    "count": 12
+  },
+  {
+    "categoryName": "Wear",
+    "name": "Boots adidas",
+    "price": 45,
+    "count": 2
+  },
+  {
+    "name": "Ololoo",
+    "price": 22.55,
+    "count": 11
+  },
+  {
+    "name": "Foo",
+    "price": 0.33,
+    "count": 3
+  },
+  {
+    "name": "Bar",
+    "price": 7.77,
+    "count": 1,
+    "categoryName": "Beer"
+  }
+]

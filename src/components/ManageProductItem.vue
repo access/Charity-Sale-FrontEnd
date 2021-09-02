@@ -98,7 +98,7 @@ export default {
       );
       //var modal = bootstrap.Modal.getOrCreateInstance(myModal);
       this.setCurrentManagedProduct(this.product);
-      console.log("this.product: ", this.product);
+      //console.log("this.product: ", this.product);
       // myModal.addEventListener("shown.bs.modal", function() {
       //   //myInput.focus();
       // });

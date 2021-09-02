@@ -42,7 +42,11 @@
             {{ product.name }}
           </p>
           <small class="text-nowrap text-info m-0 p-0">
-            {{ getCategoryName(product.categoryId) }}
+            {{
+              getCategoryName(product.categoryId).length
+                ? getCategoryName(product.categoryId)
+                : "&nbsp;"
+            }}
           </small>
           <p class="h4 fw-bold mt-3 mb-0">{{ product.price.toFixed(2) }} €</p>
         </div>

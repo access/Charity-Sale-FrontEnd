@@ -1,9 +1,7 @@
-import { createStore, createLogger } from 'vuex'
-//import { createStore } from 'vuex'
+import vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Products from './modules/Products'
-//import createPersistedState from "vuex-persistedstate";
-const debug = process.env.NODE_ENV !== 'production';
+//const debug = process.env.NODE_ENV !== 'production';
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
@@ -14,12 +12,11 @@ const vuexLocal = new VuexPersistence({
   //modules: ["Products"]
 });
 
-export default createStore({
+export default vuex.createStore({
   modules: {
     Products
   },
   //strict: debug,
-   plugins: debug ? [createLogger(), vuexLocal.plugin] : [vuexLocal.plugin]
-  //plugins: [vuexLocal.plugin]
-  //plugins: [createPersistedState()]
+  //plugins: debug ? [vuex.createLogger(), vuexLocal.plugin] : [vuexLocal.plugin]
+  plugins: [vuexLocal.plugin]
 })

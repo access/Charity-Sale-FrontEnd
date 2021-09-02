@@ -10,7 +10,7 @@
         <button
           @click="clearCart"
           class="btn btn-warning mx-sm-auto"
-          v-show="!isEmptyCart()"
+          v-show="!isEmptyCart() "
         >
           <i class="bi bi-recycle"></i>
           CLEAR SHOPPING CART
@@ -34,7 +34,7 @@
                 :product="product"
                 :index="index"
                 :productAvailableCount="productAvailableCount"
-                :removeFromCart="removeFromCart"
+                :removeOneFromCart="removeOneFromCart"
                 :addToCart="addToCart"
               />
             </template>
@@ -152,11 +152,24 @@ export default {
       cashInserted: 0,
     };
   },
+  created() {
+    this.fetchAllProducts();
+  },
   computed: {
-    ...mapGetters(["totalPrice", "cartList", "productAvailableCount"]),
+    ...mapGetters([
+      "totalPrice",
+      "cartList",
+      "productAvailableCount",
+    ]),
   },
   methods: {
-    ...mapActions(["addToCart", "clearCart", "removeFromCart", "confirmOrder"]),
+    ...mapActions([
+      "fetchAllProducts",
+      "addToCart",
+      "clearCart",
+      "removeOneFromCart",
+      "confirmOrder",
+    ]),
     getOverpay() {
       return (this.cashInserted - this.totalPrice).toFixed(2);
     },

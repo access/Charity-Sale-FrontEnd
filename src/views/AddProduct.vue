@@ -177,12 +177,9 @@ export default {
       this.image = "";
     },
     addNewProduct() {
-      console.log("isValidProduct(): ", this.isValidProduct());
-      console.log("Product: ", this.product);
-
       if (this.isValidProduct()) {
         this.postNewProduct(this.product);
-      this.$router.push('/publish-complete');
+        this.$router.push("/publish-complete");
       }
     },
     isValidProduct() {
