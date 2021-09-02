@@ -179,7 +179,6 @@ export default {
     addNewProduct() {
       if (this.isValidProduct()) {
         this.postNewProduct(this.product);
-        this.$router.push("/publish-complete");
       }
     },
     isValidProduct() {

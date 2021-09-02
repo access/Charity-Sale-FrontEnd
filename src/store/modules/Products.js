@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { notify } from "@kyvg/vue3-notification";
+import router from '@/router'
+
 
 const notice = (title, message, type = '') => {
   notify({
@@ -55,8 +57,8 @@ const Products = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
         .then(res => {
-          if (res.status == 204) {
-            notice("Bulk upload", "Upload succesful complete!", 'success');
+          if (res.status == 201) {
+            notice("Bulk upload", "Upload completed successfully!", 'success');
             commit("OK");
           }
           else {
@@ -78,7 +80,7 @@ const Products = {
       await axios.put(url, product)
         .then(async res => {
           await dispatch('fetchAllProducts');
-          if (res.status == 204) {
+          if (res.status == 201) {
             notice("Stock manage", "Changes have been applied!", 'success');
             commit("OK");
           }
@@ -100,6 +102,10 @@ const Products = {
           if (res.status == 201) {
             notice("Publish product", "Your publish is complete!", 'success');
             commit("OK");
+            router.push("/publish-complete");
+          }
+          else if (res.status == 205) {
+            notice("Publish product", `The product is invalid!`, 'warn');
           }
           else {
             notice("Publish product", `${res.status} An error has occurred!`, 'warn');
@@ -109,14 +115,19 @@ const Products = {
           notice("Publish product", `${err}`, 'error');
         });
     },
-    // PUT: api/ProductItems -> [FromBody] ProductItem[] productItems
-    async confirmOrder({ commit }, cartList) {
+    // PUT: api/ProductItems -> [FromBody] Products productItems
+    async confirmOrder({ commit , dispatch}, cartList) {
       const url = `${process.env.VUE_APP_API_PRODUCT_ITEMS}`;
       await axios.put(url, cartList)
         .then(res => {
-          if (res.status == 204) {
+          if (res.status == 201) {
             notice("Checkout", "Your order is complete!", 'success');
             commit('clearCart');
+            router.push("/order-complete");
+          }
+          else if (res.status == 205) {
+            notice("Checkout", `Some items have already been sold!`, 'warn');
+            dispatch('fetchAllProducts');
           }
           else {
             notice("Checkout", `${res.status} An error has occurred!`, 'warn');

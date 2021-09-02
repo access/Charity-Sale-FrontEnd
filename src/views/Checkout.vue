@@ -178,7 +178,6 @@ export default {
     },
     makeOrder() {
       this.confirmOrder(this.cartList);
-      this.$router.push("/order-complete");
     },
   },
 };
