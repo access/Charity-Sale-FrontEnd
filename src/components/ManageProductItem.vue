@@ -90,18 +90,13 @@ export default {
       return this.product.count <= 0;
     },
     manageProduct() {
-      var myModal = new bootstrap.Modal(
+      const myModal = new bootstrap.Modal(
         document.getElementById("ManageProductModal"),
         {
           keyboard: false,
         }
       );
-      //var modal = bootstrap.Modal.getOrCreateInstance(myModal);
       this.setCurrentManagedProduct(this.product);
-      //console.log("this.product: ", this.product);
-      // myModal.addEventListener("shown.bs.modal", function() {
-      //   //myInput.focus();
-      // });
 
       myModal.show();
     },

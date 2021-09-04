@@ -187,14 +187,6 @@ const Products = {
       commit('calculateTotalPrice');
     },
 
-    // async fetchProductInfo({ commit }, product) {
-    //   await axios.get(`${process.env.VUE_APP_API_PRODUCT_ITEMS}/${product.id}`)
-    //     .then(async res => {
-    //       commit('OK');
-    //     }).catch(err => {
-    //       notice("Retrieving data", `${err}`, 'error');
-    //     });
-    // },
   },
 
   mutations: {
@@ -207,7 +199,6 @@ const Products = {
     },
 
     setProducts: (state, products) => {
-      //if (!state.managmentMode) 
       if (!state.managmentMode) {
         // check if Cart already filled
         // then recalculate products...
@@ -295,17 +286,6 @@ const Products = {
       state.totalPrice = 0;
     },
 
-    // setProductInfo(state, product) {
-    //   console.log("fetchProductInfo: ", state, product);
-    //   // for (const [index, item] of state.products.entries()) {
-    //   //   if (item.id == product.id) {
-
-    //   //     //state.products[index] = product;
-    //   //     //console.log("founded: ", state.products[index].count);
-    //   //     break;
-    //   //   }
-    //   // }
-    // },
     OK() {
 
     }

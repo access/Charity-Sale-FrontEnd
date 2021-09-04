@@ -161,17 +161,9 @@ export default {
       var reader = new FileReader();
 
       reader.onload = (e) => {
-        // const arrayBuffer = this.result;
-        // const array = new Uint8Array(arrayBuffer);
-        // const binaryString = String.fromCharCode.apply(null, array);
-        // this.product.imageFile = binaryString;
         this.product.imageFile = e.target.result;
       };
-      // reader.addEventListener("loadend", (e) => {
-      //   this.product.imageFile = new Uint8Array(e.target.result);
-      // });
       reader.readAsDataURL(file);
-      //reader.readAsArrayBuffer(file);
     },
     removeImage: function() {
       this.image = "";
